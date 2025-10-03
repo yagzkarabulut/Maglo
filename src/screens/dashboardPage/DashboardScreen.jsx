@@ -1,51 +1,68 @@
 import React, { useEffect, useState } from "react";
+import useTransactions from "../../hooks/useTransactions";
 import { useLocation } from "react-router-dom";
-import Header from "../../components/ui/Header";
+
 import SideBar from "../../components/ui/SideBar";
+import Loading from "../../components/ui/Loading";
+import MainDasboard from "./components/MainDasboard";
+import SelectedDetail from "./components/ui/SelectedDetail";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const { email, from } = (location.state || {}) ;
+  const { email, from, userName } = (location.state || {}) ;
+  const { data: state, loading: dataLoading, error } = useTransactions();
+  const [selectedDetail, setSelectedDetail] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 1200); 
     return () => clearTimeout(t);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen grid place-items-center">
-        <div className="flex flex-col items-center gap-4">
-          <span className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-          <p className="text-gray-600">Dashboard yükleniyor…</p>
-        </div>
-      </div>
-    );
-  }
 
-  return (
-    <>
-    <Header />
-  <div className="flex justify-between min-h-screen">
-    <SideBar />
-    <main className="p-6 flex-1">
+
+return (
+  <>
+    {loading || dataLoading ? (
+      <Loading />
+    ) : error ? (
+      <div className="text-red-500 p-4">Veri alınamadı: {error}</div>
+    ) : (
+      <>
         
-      <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
-      {from === "login" && (
-        <p className="text-gray-600 mb-6">
-          Hoş geldin{email ? `, ${email}` : ""}! 👋
-        </p>
-      )}
+        <div className="flex min-h-screen w-full">
+          {/* SideBar sadece md ve üstünde görünür, mobilde hamburger ile açılır */}
+          <div className="flex flex-row"> 
+              <div className="hidden md:block md:w-64 md:h-auto">
+            <SideBar mode="desktop" />
+            
+          </div>
+          
 
-      {/* Örnek içerik */}
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="p-4 border rounded">Toplam Bakiye</div>
-        <div className="p-4 border rounded">Gelir</div>
-        <div className="p-4 border rounded">Gider</div>
-      </section>
-    </main>
-    </div>
-    </>
-  );
+          </div>
+        
+          <div className="flex-1 min-w-0 w-full">
+            <MainDasboard
+              email={email}
+              from={from}
+              userName={userName}
+              data={state}
+              setSelectedDetail={setSelectedDetail}
+            />
+            {selectedDetail && (
+              <SelectedDetail detail={selectedDetail} onClose={() => setSelectedDetail(null)} />
+            )}
+          </div>
+          {/* Hamburger ve overlay mobilde her zaman aktif */}
+          <div className="md:hidden">
+            <SideBar mode="mobile" />
+          </div>
+        </div>
+      </>
+    )}
+  </>
+);
+
+
+  
 }
