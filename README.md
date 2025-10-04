@@ -1,6 +1,6 @@
 <div align="center">
 
-# Maaglo – Finansal Takip Platformu
+# Maglo – Finansal Takip Platformu
 
 Kullanıcıların gelir–gider hareketlerini, işletme sermayesini ve planlı transferlerini takip edebileceği; bileşen mimarisi, temiz kod ve erişilebilirlik odaklı geliştirilen bir demo finans dashboard uygulaması.
 
