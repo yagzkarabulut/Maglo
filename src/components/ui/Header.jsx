@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import users from "../../assets/users.jpg";
 import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { useGlobalLoader } from '../../App';
 
 const Header = ({ userName: propUserName }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,6 +14,7 @@ const Header = ({ userName: propUserName }) => {
   const searchInputRef = useRef();
   const { userName, logout } = useUser();
   const navigate = useNavigate();
+  const { setShow } = useGlobalLoader();
 
   // Menü dışına tıklanınca kapat
   useEffect(() => {
@@ -57,10 +59,10 @@ const Header = ({ userName: propUserName }) => {
   }, [notifOpen]);
 
   return (
-    <header className="bg-white ">
-      <div className="flex items-center justify-between px-8 py-5 w-full relative">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <div className="flex items-center gap-3 relative">
+  <header className="bg-white header-mobile-full mb-6">
+      <div className="flex flex-wrap md:flex-nowrap items-center gap-4 md:gap-6 justify-between px-4 md:px-8 py-4 md:py-5 w-full relative header-responsive">
+        <h1 className="header-title text-xl md:text-2xl font-bold text-gray-900 flex-shrink-0 order-1 basis-full sm:basis-auto mb-1 sm:mb-0">Dashboard</h1>
+        <div className="header-actions flex items-center gap-2 md:gap-3 relative order-3 md:order-2 ml-auto basis-full sm:basis-auto justify-start sm:justify-end flex-wrap sm:flex-nowrap">
           {/* Search icon ve input */}
           <div className="relative">
             <button
@@ -75,7 +77,7 @@ const Header = ({ userName: propUserName }) => {
                 ref={searchInputRef}
                 type="text"
                 placeholder="Ara..."
-                className="absolute right-0 top-0 h-10  pr-3 rounded-2xl pl-3 border  border-gray-200 shadow focus:ring-2 focus:ring-lime-400 focus:outline-none transition-all w-96  bg-white z-10 duration-300 ease-in-out transform scale-90 opacity-0 animate-searchIn"
+                className="absolute right-0 top-0 h-10 pr-3 rounded-2xl pl-3 border border-gray-200 shadow focus:ring-2 focus:ring-lime-400 focus:outline-none transition-all w-96 header-search-input bg-white z-10 duration-300 ease-in-out transform scale-90 opacity-0 animate-searchIn"
                 onBlur={() => setSearchOpen(false)}
                 style={{animation: 'searchIn 0.25s cubic-bezier(0.4,0,0.2,1) forwards' }}
               />
@@ -137,15 +139,15 @@ const Header = ({ userName: propUserName }) => {
             )}
           </div>
           {/* Profil ve menü */}
-         <div className="relative  bg-gray-50 rounded-2xl px-2 py-1 " ref={menuRef}>
+         <div className="relative bg-gray-50 rounded-2xl px-2 py-1 order-2 md:order-3 mt-2 sm:mt-0" ref={menuRef}>
       <button
         className="flex items-center gap-2 px-4 py-1 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400"
         onClick={() => setMenuOpen(v => !v)}
         aria-haspopup="true"
         aria-expanded={menuOpen}
       >
-        <img width={30} src={users} alt="users" className="rounded-full border mr-2  border-gray-200" />
-  <span className="font-semibold mr-2 text-gray-900 hidden md:block">{userName || propUserName || 'Kullanıcı'}</span>
+    <img width={30} src={users} alt="users" className="rounded-full border mr-2  border-gray-200" />
+  <span className="profile-name font-semibold mr-2 text-gray-900 hidden md:block">{userName || propUserName || 'Kullanıcı'}</span>
         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
@@ -178,8 +180,12 @@ const Header = ({ userName: propUserName }) => {
           <button
             className="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-500 border-t border-gray-100"
             onClick={() => {
-              logout();
-              navigate('/', { replace: true });
+              setShow(true);
+              setTimeout(() => {
+                logout();
+                setShow(false);
+                navigate('/', { replace: true });
+              }, 1200);
             }}
             role="menuitem"
           >Çıkış Yap</button>

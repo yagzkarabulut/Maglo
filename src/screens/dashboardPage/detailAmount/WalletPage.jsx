@@ -6,14 +6,7 @@ import Wallet from '../components/ui/Wallet';
 export default function WalletPage() {
   return (
     <div className="flex min-h-screen w-full bg-white">
-      {/* Sidebar (desktop) */}
-      <div className="hidden md:block md:w-64 md:h-auto border-r border-gray-100 bg-gray-50">
-        <SideBar />
-      </div>
-      {/* Mobile sidebar (hamburger controlled inside component) */}
-      <div className="md:hidden">
-        <SideBar mode="mobile" />
-      </div>
+      <SideBar />
       {/* Main area */}
       <div className="flex-1 flex flex-col min-w-0">
         <div className='bg-gray-50'><Header userName="Kullanıcı" /></div>

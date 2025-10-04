@@ -70,14 +70,7 @@ export default function TransactionsPage() {
 
   return (
     <div className="flex min-h-screen w-full bg-white">
-      {/* Sidebar desktop */}
-      <div className="hidden md:block md:w-64 md:h-auto border-r border-gray-100 bg-gray-50">
-        <SideBar />
-      </div>
-      {/* Mobile sidebar */}
-      <div className="md:hidden">
-        <SideBar mode="mobile" />
-      </div>
+      <SideBar />
       {/* Main content area */}
       <div className="flex-1 flex flex-col min-w-0">
         <Header userName="Kullanıcı" />

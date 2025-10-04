@@ -67,7 +67,7 @@ const SelectedDetail = ({ detail, onClose }) => {
         role="dialog"
         aria-modal="true"
         aria-label="İşlem Detayları"
-        className="relative bg-white p-4 sm:p-5 md:p-8 rounded-xl shadow-xl w-full max-w-lg transition-all duration-300 ease-out animate-fadeInScale border border-gray-100"
+  className="relative bg-white p-4 sm:p-5 md:p-8 rounded-xl shadow-xl w-full max-w-lg transition-all duration-300 ease-out animate-fadeInScale"
         style={{ animation: 'fadeInScale 0.3s cubic-bezier(0.4,0,0.2,1)' }}
       >
       <h2 className="text-lg font-bold mb-2">Detaylar</h2>

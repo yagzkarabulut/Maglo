@@ -1,6 +1,6 @@
 <div align="center">
 
-# Maglo – Finansal Takip Platformu 
+# Maaglo – Finansal Takip Platformu (Case Çalışması)
 
 Kullanıcıların gelir–gider hareketlerini, işletme sermayesini ve planlı transferlerini takip edebileceği; bileşen mimarisi, temiz kod ve erişilebilirlik odaklı geliştirilen bir demo finans dashboard uygulaması.
 
@@ -20,18 +20,13 @@ Kullanıcıların gelir–gider hareketlerini, işletme sermayesini ve planlı t
 9. Performans  
 10. Klasör Yapısı  
 11. Script’ler  
-12. Öne Çıkan Yaklaşımlar  
+12. Yol Haritası  
+13. Öne Çıkan Yaklaşımlar  
 
 ---
 
 ## 1. Amaç ve Kapsam
-Bu proje; React bileşen tasarımı, durum (state) yönetimi, veri modelleme, erişilebilirlik ve kod kalitesi yaklaşımlarının incelenmesi amacıyla hazırlanmış bir vaka çalışmasıdır. Gerçek bir arka uç (backend) servisi yerine, geliştirme sürecinde json-server tabanlı mock API kullanılmıştır.
-
-Giriş (login) modülünde gerekli validasyonlar gerçekleştirilmekte; bilgiler doğru girildiği takdirde kullanıcı, üzerinde yüklenme animasyonu (loader) bulunan bir buton aracılığıyla doğrulama sürecine alınmakta ve başarıyla bağlanması durumunda dashboard ekranına yönlendirilmektedir. Bu geçiş sürecinde, kullanıcı deneyimini artırmak için ek bir loading aşaması uygulanmaktadır.
-
-Dashboard üzerinde, kart (card) yapıları aracılığıyla Türk Lirası ve Dolar cinsinden finansal veriler sunulmaktadır. Grafik bileşeninde ise kullanıcı, hover etkileşimi ile gelir-gider dağılımını görüntüleyebilmekte; ayrıca grafik üzerinde tıklama işlemiyle açılan bir detay modalı üzerinden daha kapsamlı verilere erişebilmektedir.
-
-Projenin genelinde, modüler dosya yapısı benimsenmiş olup, tüm bileşenler ve işlevler dinamik, yeniden kullanılabilir ve ölçeklenebilir bir şekilde tasarlanmıştır.
+Bu proje; React component tasarımı, state yönetimi, veri modelleme, erişilebilirlik ve kod kalitesi yaklaşımını değerlendirmek amacıyla hazırlanmış bir vaka çalışmasıdır. Gerçek backend yerine `json-server` mock API kullanılır.
 
 ## 2. Kurulum
 ```bash

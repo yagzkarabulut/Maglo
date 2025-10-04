@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { FaSignInAlt, FaFileAlt, FaFolder } from "react-icons/fa";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import SmallSpinner from './SmallSpinner';
+import { useGlobalLoader } from '../../App';
 import { useUser } from '../../context/UserContext';
-import { useNavigate } from 'react-router-dom';
 
 export default function SideBar() {
-  const [collapsed, setCollapsed] = useState(false);
-  const location = useLocation();
+  const { setShow } = useGlobalLoader();
   const { logout } = useUser();
+  const [collapsed, setCollapsed] = useState(false);
+  const [loadingPath, setLoadingPath] = useState(null); // hangi menüde loader var
+  const location = useLocation();
   const navigate = useNavigate();
 
   const current = location.pathname;
@@ -17,30 +20,33 @@ export default function SideBar() {
   }
 
   const itemBase =
-    "flex items-center gap-2 px-4 py-3 rounded-lg transition-colors duration-150 text-base";
+    "flex items-center gap-2 py-3 rounded-lg transition-colors duration-150 text-base";
   const activeItem = "bg-lime-300 font-semibold text-gray-900";
-  const itemJustify = collapsed ? "justify-center" : "justify-start";
+  const itemJustify = "justify-start"; // always left align
   const labelClass = collapsed ? "hidden" : "";
+  // Narrower icon column when collapsed
+  const iconWrapper = collapsed ? "w-8 flex justify-center" : "w-6";
+  const linkPadding = collapsed ? "px-2" : "px-4";
 
   return (
     <aside
-      className={`${collapsed ? "w-16" : "w-64"} h-full bg-gray-50 border-r border-gray-100 flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden`}
+      className={`${collapsed ? "w-12" : "w-64"} min-h-screen bg-gray-50 border-r border-gray-100 flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden flex`}
       aria-label="Sidebar Navigation"
     >
-  <nav className="flex flex-col h-full p-6 pt-8">
-       
-        <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center">
+      <nav className="flex flex-col flex-1 p-6 pt-8">
+        <div className="flex items-center justify-between mb-10 pr-1">
+          <div className="flex items-center overflow-hidden">
             <img
               src={require("../../assets/logo.JPG")}
               alt="Logo"
               className="w-10 h-10 mr-2"
             />
-            <span className={`font-bold text-2xl text-gray-900 ${labelClass}`}>
-              Maglo.
-            </span>
+            {!collapsed && (
+              <span className={`font-bold text-2xl text-gray-900`}>
+                Maglo.
+              </span>
+            )}
           </div>
-
           {/* Toggle Hamburger */}
           <button
             type="button"
@@ -58,76 +64,61 @@ export default function SideBar() {
             </span>
           </button>
         </div>
-
         {/* Menu */}
-  <ul className="mt-10 flex-1 flex flex-col gap-1">
-          <li>
-            <a
-              href="/dashboard"
-              className={`${itemBase} ${itemJustify} ${ isActive('/dashboard') ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
-              title="Dashboard"
-            >
-              <FaFolder className="text-lg" />
-              <span className={labelClass}>Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/transactions"
-              className={`${itemBase} ${itemJustify} ${ isActive('/transactions') ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
-              title="Transactions"
-            >
-              <FaFileAlt className="text-lg" />
-              <span className={labelClass}>Transactions</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/invoices"
-              className={`${itemBase} ${itemJustify} ${ isActive('/invoices') ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
-              title="Invoices (Expenses)"
-            >
-              <FaFileAlt className="text-lg" />
-              <span className={labelClass}>Invoices</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/wallet"
-              className={`${itemBase} ${itemJustify} ${ isActive('/wallet') ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
-              title="My Wallets"
-            >
-              <FaFolder className="text-lg" />
-              <span className={labelClass}>My Wallets</span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="/settings"
-              className={`${itemBase} ${itemJustify} ${ isActive('/settings') ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
-              title="Settings"
-            >
-              <FaFileAlt className="text-lg" />
-              <span className={labelClass}>Settings</span>
-            </a>
-          </li>
+        <ul className="mt-10 flex-1 flex flex-col gap-1">
+          {[
+            { path: '/dashboard', icon: <FaFolder className="text-lg mx-auto" />, label: 'Dashboard' },
+            { path: '/transactions', icon: <FaFileAlt className="text-lg mx-auto" />, label: 'Transactions' },
+            { path: '/invoices', icon: <FaFileAlt className="text-lg mx-auto" />, label: 'Invoices' },
+            { path: '/wallet', icon: <FaFolder className="text-lg mx-auto" />, label: 'My Wallets' },
+            { path: '/settings', icon: <FaFileAlt className="text-lg mx-auto" />, label: 'Settings' },
+          ].map(item => (
+            <li key={item.path}>
+              <button
+                type="button"
+                className={`${itemBase} ${linkPadding} ${ isActive(item.path) ? activeItem : 'text-gray-500 hover:bg-gray-100'}`}
+                title={item.label}
+                disabled={loadingPath !== null}
+                onClick={() => {
+                  if (current === item.path) return;
+                  setLoadingPath(item.path);
+                  setTimeout(() => {
+                    setLoadingPath(null);
+                    navigate(item.path);
+                  }, 1200);
+                }}
+              >
+                <span className={iconWrapper}>{item.icon}</span>
+                <span className={labelClass}>{item.label}</span>
+                {loadingPath === item.path && <SmallSpinner />}
+              </button>
+            </li>
+          ))}
         </ul>
 
         {/* Bottom Buttons */}
-        <div className="mt-auto space-y-2">
+        <div className="mt-auto pt-8 space-y-2">
           <button
-            className={`${itemBase} ${itemJustify} text-gray-500 hover:bg-gray-100 w-full`}
+            className={`${itemBase} ${linkPadding} text-gray-500 hover:bg-gray-100 w-full`}
             title="Help"
           >
-            <FaFileAlt className="text-lg" />
+            <span className={iconWrapper}><FaFileAlt className="text-lg mx-auto" /></span>
             <span className={labelClass}>Help</span>
           </button>
           <button
-            onClick={() => { logout(); navigate('/', { replace: true }); }}
-            className={`${itemBase} ${itemJustify} text-gray-500 hover:bg-gray-100 w-full`}
+            className={`${itemBase} ${linkPadding} text-gray-500 hover:bg-gray-100 w-full`}
             title="Logout"
+            onClick={() => {
+              setShow(true);
+              setTimeout(() => {
+                logout();
+                setShow(false);
+                // React Router ile yönlendir
+                navigate('/');
+              }, 1200);
+            }}
           >
-            <FaSignInAlt className="text-lg" />
+            <span className={iconWrapper}><FaSignInAlt className="text-lg mx-auto" /></span>
             <span className={labelClass}>Logout</span>
           </button>
         </div>

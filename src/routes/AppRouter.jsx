@@ -8,38 +8,17 @@ import WalletPage from "../screens/dashboardPage/detailAmount/WalletPage";
 import TransactionsPage from "../screens/dashboardPage/detailAmount/TransactionsPage";
 import Loading from "../components/ui/Loading";
 
-// Wrapper: route path değiştiğinde kısa süre loader gösterir
-function RouteWithLoader({ element, minDelay = 600 }) {
-  const location = useLocation();
-  const [show, setShow] = useState(true);
-  const [content, setContent] = useState(null);
-
-  useEffect(() => {
-    setShow(true);
-    setContent(null);
-    const t = setTimeout(() => {
-      setShow(false);
-      setContent(element);
-    }, minDelay);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
-
-  return show ? <Loading /> : content;
-}
-
-
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<RouteWithLoader element={<LoginScreen />} />} />
-        <Route path="/dashboard" element={<RouteWithLoader element={<DashboardScreen />} />} />
-        <Route path="/expense" element={<RouteWithLoader element={<ExpensePage />} />} />
-        <Route path="/wallet" element={<RouteWithLoader element={<WalletPage />} />} />
-        <Route path="/transactions" element={<RouteWithLoader element={<TransactionsPage />} />} />
-        <Route path="/invoices" element={<RouteWithLoader element={<ExpensePage />} />} />
+        <Route path="/" element={<LoginScreen />} />
+        <Route path="/dashboard" element={<DashboardScreen />} />
+        <Route path="/expense" element={<ExpensePage />} />
+        <Route path="/wallet" element={<WalletPage />} />
+        <Route path="/transactions" element={<TransactionsPage />} />
+        <Route path="/invoices" element={<ExpensePage />} />
       </Routes>
     </BrowserRouter>
   );

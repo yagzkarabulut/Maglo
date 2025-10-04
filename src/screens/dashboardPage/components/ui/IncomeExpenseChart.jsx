@@ -74,7 +74,7 @@ export default function IncomeExpenseChart({
               stroke="var(--color-green-500)"
               strokeWidth={3}
               dot={false}
-              activeDot={{ fill: "var(--color-green-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+              activeDot={{ fill: "var(--color-green-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload, e) }}
               name="Income"
               animationDuration={900}
               animationEasing="ease-out"
@@ -87,7 +87,7 @@ export default function IncomeExpenseChart({
               stroke="var(--color-lime-500)"
               strokeWidth={3}
               dot={false}
-              activeDot={{ fill: "var(--color-lime-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+              activeDot={{ fill: "var(--color-lime-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload, e) }}
               name="Expenses"
               animationDuration={900}
               animationEasing="ease-out"

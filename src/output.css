@@ -1943,3 +1943,50 @@
   .bg-lime-700 { background-color: var(--color-lime-700); }
   .bg-lime-800 { background-color: var(--color-lime-800); }
 }
+
+/* Responsive helper: header search input width shrink under breakpoints */
+@media (max-width: 800px) {
+  .header-search-input { width: 15rem !important; }
+}
+@media (max-width: 560px) {
+  .header-search-input { width: 12rem !important; }
+}
+@media (max-width: 420px) {
+  .header-search-input { width: 10rem !important; font-size: 0.75rem; }
+}
+
+/* ==============================
+   Header tam genişlik ( <768px )
+   Sidebar sabit 16rem (w-64) olduğundan içerideki header'ı sola kaydırıp
+   viewport genişliğine yayıyoruz.
+============================== */
+@media (max-width: 768px) {
+  .header-mobile-full {
+    width: 100%;
+    margin-left: 0;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--color-gray-100);
+    background: #fff;
+  }
+  .header-mobile-full .header-search-input { width: 11rem !important; }
+}
+
+/* Intermediate tweak for tablets: 720px */
+@media (max-width: 720px) {
+  .header-responsive { row-gap: .5rem; }
+  .header-responsive .header-title { flex-basis: 100%; order: 1; }
+  .header-responsive .header-actions { flex-basis: 100%; order: 2; justify-content: flex-start; }
+  .header-responsive .profile-name { display: none !important; }
+  .header-mobile-full .header-search-input { width: 12rem !important; }
+}
+
+@media (max-width: 600px) {
+  .header-responsive h1 { font-size: 1.15rem; }
+  .header-responsive { row-gap: .35rem; }
+  .header-responsive .header-search-input { width: 9.5rem !important; }
+  .header-responsive .header-actions { justify-content: space-between; width: 100%; }
+  .header-responsive .header-actions > * { margin-top: 2px; }
+  .header-responsive .header-title { margin-bottom: 6px; }
+}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../../context/UserContext';
 import lineImg from "../../../assets/line.JPG";
+import { useGlobalLoader } from '../../../App';
 
 const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const passwordReg = /^.{6,}$/; // en az 6 karakter
@@ -15,6 +16,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
+  const { setShow } = useGlobalLoader();
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -26,11 +28,13 @@ const LoginForm = () => {
     setPasswordError(!passwordReg.test(password));
     if (!name || !emailReg.test(email) || !passwordReg.test(password)) return;
     setLoading(true);
+    setShow(true);
     setTimeout(() => {
       setLoading(false);
+      setShow(false);
       setUser(name, email);
       navigate("/dashboard", { replace: true });
-    }, 1000);
+    }, 1200);
   };
 
   return (
