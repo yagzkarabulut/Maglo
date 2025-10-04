@@ -1,62 +1,109 @@
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "../styles/wallet.css";
 
-// Figma'ya uygun, dinamik ve modern bir Wallet/Card componenti
-const Wallet = ({
-  bankName = "Maglo.",
-  cardType = "Universal Bank",
-  cardNumber = "5495 7381 3759 2321",
-  cardLogo = "https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg",
-  chip = true,
-  expiry = "09/25",
-  owner = "",
-  gradient = true,
-  secondary = false,
-}) => {
+// Wallet: başlık + üç nokta menü + üst üste iki kart görünümü
+const Wallet = () => {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Dışarı tıklayınca menüyü kapat
+  useEffect(() => {
+    const onClick = (e) => {
+      if (!menuRef.current) return;
+      if (!menuRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
   return (
-    <div
-  className={`relative w-full max-w-[420px] h-[210px] rounded-3xl p-6 shadow-2xl flex flex-col justify-between overflow-hidden border border-gray-700 
-        ${gradient
-          ? secondary
-            ? "bg-gradient-to-br from-gray-700 via-gray-900 to-gray-800"
-            : "bg-gradient-to-br from-[#23242b] via-[#23242b] to-[#181920]"
-          : "bg-gray-800"}
-      `}
-      style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)'}}
-    >
-      {/* Chip ve logo */}
-      <div className="flex items-center justify-between mb-6">
-        {chip && (
-          <div className="w-10 h-7 bg-gray-200 rounded-md flex items-center justify-center shadow-inner">
-            <div className="w-6 h-3 bg-gray-400 rounded-sm"></div>
+    <section className="wallet">
+      {/* Header */}
+      <div className="wallet__header" ref={menuRef}>
+        <h3 className="wallet__title">Wallet</h3>
+        <button
+          type="button"
+          aria-label="Menüyü aç/kapat"
+          className="wallet__menu-button"
+          onClick={() => setOpen((s) => !s)}
+        >
+          {/* three-dots icon */}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="5" cy="12" r="2" fill="#6B7280" />
+            <circle cx="12" cy="12" r="2" fill="#6B7280" />
+            <circle cx="19" cy="12" r="2" fill="#6B7280" />
+          </svg>
+        </button>
+
+        {open && (
+          <div className="wallet__menu" role="menu">
+            <button
+              className="wallet__menu-item"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                navigate('/wallet');
+              }}
+            >
+              Ayarlar
+            </button>
           </div>
         )}
-        <img src={cardLogo} alt="Card Logo" className="h-8 ml-auto drop-shadow" />
       </div>
-      {/* Banka adı ve tip */}
-      <div className="mb-1">
-        <div className="text-white text-xl font-bold tracking-wider drop-shadow-sm">{bankName}</div>
-        <div className="text-gray-300 text-xs font-medium tracking-wide">{cardType}</div>
-      </div>
-      {/* Kart numarası */}
-      <div className="text-white text-2xl font-mono tracking-[0.25em] mb-3 select-text drop-shadow">
-        {cardNumber}
-      </div>
-      {/* Alt bilgiler */}
-      <div className="flex items-center justify-between text-xs text-gray-200 mt-2">
-        <div>
-          <div className="opacity-60 text-[10px]">VALID THRU</div>
-          <div className="font-semibold tracking-wider text-sm">{expiry}</div>
+
+      {/* Card stack */}
+      <div className="wallet__stack">
+        {/* Üst (koyu) kart */}
+        <div className="wallet-card wallet-card--dark">
+          <div className="wallet-card__row">
+            <div className="wallet-card__chip" />
+            <div className="wallet-card__nfc" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 8c4 0 8 4 8 8" stroke="#334155" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M8 11c2.5 0 5 2.5 5 5" stroke="#334155" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className="wallet-card__brand">
+            <span className="wallet-card__bank">Maglo.</span>
+            <span className="wallet-card__type">Universal Bank</span>
+          </div>
+          <div className="wallet-card__number">5495&nbsp;7381&nbsp;3759&nbsp;2321</div>
+          <div className="wallet-card__footer">
+            <div>
+              <div className="wallet-card__label">VALID THRU</div>
+              <div className="wallet-card__value">09/25</div>
+            </div>
+          </div>
         </div>
-        {owner && <div className="font-semibold tracking-wider text-sm">{owner}</div>}
+
+        {/* Alt (açık) kart */}
+        <div className="wallet-card wallet-card--light">
+          <div className="wallet-card__brand">
+            <span className="wallet-card__bank">Maglo.</span>
+            <span className="wallet-card__type">Commercial Bank</span>
+          </div>
+          <div className="wallet-card__row wallet-card__row--middle">
+            <div className="wallet-card__chip" />
+            <div className="wallet-card__nfc" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 8c4 0 8 4 8 8" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M8 11c2.5 0 5 2.5 5 5" stroke="#94A3B8" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div className="wallet-card__number wallet-card__number--masked">85952548****</div>
+          <div className="wallet-card__footer">
+            <div>
+              <div className="wallet-card__label">09/25</div>
+            </div>
+            <div className="wallet-card__logo">VISA</div>
+          </div>
+        </div>
       </div>
-      {/* Parlak overlay efekti */}
-      <div className="absolute left-0 top-0 w-full h-full pointer-events-none">
-        <svg width="100%" height="100%" viewBox="0 0 350 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute">
-          <ellipse cx="260" cy="-30" rx="120" ry="60" fill="#fff" fillOpacity="0.08" />
-          <ellipse cx="60" cy="220" rx="120" ry="60" fill="#fff" fillOpacity="0.06" />
-        </svg>
-      </div>
-    </div>
+    </section>
   );
 };
 

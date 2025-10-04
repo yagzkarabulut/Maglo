@@ -1,31 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useTransactions from "../../hooks/useTransactions";
 import { useLocation } from "react-router-dom";
 
 import SideBar from "../../components/ui/SideBar";
-import Loading from "../../components/ui/Loading";
-import MainDasboard from "./components/MainDasboard";
+import MainDashboard from "./components/MainDashboard"; // file renamed
 import SelectedDetail from "./components/ui/SelectedDetail";
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const { email, from, userName } = (location.state || {}) ;
+  const { userName } = (location.state || {}) ;
   const { data: state, loading: dataLoading, error } = useTransactions();
   const [selectedDetail, setSelectedDetail] = useState(null);
 
-  useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1200); 
-    return () => clearTimeout(t);
-  }, []);
-
-
-
-return (
-  <>
-    {loading || dataLoading ? (
-      <Loading />
-    ) : error ? (
+  return (
+    <>
+      {dataLoading ? (
+        <div className="p-8 text-gray-500 text-sm">Yükleniyor...</div>
+      ) : error ? (
       <div className="text-red-500 p-4">Veri alınamadı: {error}</div>
     ) : (
       <>
@@ -42,9 +33,7 @@ return (
           </div>
         
           <div className="flex-1 min-w-0 w-full">
-            <MainDasboard
-              email={email}
-              from={from}
+            <MainDashboard
               userName={userName}
               data={state}
               setSelectedDetail={setSelectedDetail}
@@ -60,8 +49,8 @@ return (
         </div>
       </>
     )}
-  </>
-);
+    </>
+  );
 
 
   

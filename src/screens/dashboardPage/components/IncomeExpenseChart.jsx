@@ -19,7 +19,7 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
         <h2 className="text-lg font-semibold text-gray-900">Working Capital</h2>
         <div className="flex items-center gap-4">
           <span className="flex items-center text-green-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1" />Income</span>
-          <span className="flex items-center text-red-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1" />Expenses</span>
+          <span className="flex items-center text-lime-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-lime-500 mr-1" />Expenses</span>
           <select
             className="ml-4 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-blue-500 bg-white"
             value={selectedRange}
@@ -48,8 +48,8 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
             dataKey="income"
             stroke="var(--color-green-500)"
             strokeWidth={3}
-            dot={{ fill: "var(--color-green-300)", r: 7, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            activeDot={{ fill: "var(--color-green-500)", r: 9, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+            dot={false}
+            activeDot={{ fill: "var(--color-green-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
             name="Income"
             animationDuration={900}
             animationEasing="ease-out"
@@ -57,10 +57,10 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
           <Line
             type="monotone"
             dataKey="expense"
-            stroke="var(--color-red-500)"
+            stroke="var(--color-lime-500)"
             strokeWidth={3}
-            dot={{ fill: "var(--color-red-500)", r: 7, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            activeDot={{ fill: "var(--color-red-500)", r: 9, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+            dot={false}
+            activeDot={{ fill: "var(--color-lime-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
             name="Expenses"
             animationDuration={900}
             animationEasing="ease-out"

@@ -1,9 +1,19 @@
 import React from "react";
 import formatCurrency from '../../../../utils/formatCurrency';
-import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Bar } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis, Tooltip, ResponsiveContainer, Bar } from "recharts";
+import { formatDateTick, formatDateLong } from '../../../../utils/formatDate';
 
-
-export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7, setSelectedRange }) {
+// Props: title, selectedRange, showIncome/showExpense to allow reuse in expense-only page
+export default function IncomeExpenseChart({
+  data,
+  onDotClick,
+  selectedRange = 7,
+  setSelectedRange,
+  title = 'Working Capital',
+  showIncome = true,
+  showExpense = true,
+  bare = false
+}) {
   // Tooltip ile bar highlight için state
   const [activeIndex, setActiveIndex] = React.useState(null);
 
@@ -13,23 +23,37 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
     return data.slice(-selectedRange);
   }, [data, selectedRange]);
 
+  const Wrapper = bare ? React.Fragment : 'div';
+  const wrapperProps = bare ? {} : { className: 'bg-white rounded-2xl shadow p-6 mb-8' };
+
+  const isEmpty = !filteredData || filteredData.length === 0;
+
   return (
-    <div className="bg-white rounded-2xl shadow p-6 mb-8">
+    <Wrapper {...wrapperProps}>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Working Capital</h2>
+        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
         <div className="flex items-center gap-4">
-          <span className="flex items-center text-green-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1" />Income</span>
-          <span className="flex items-center text-red-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1" />Expenses</span>
-          <select
-            className="ml-4 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-blue-500 bg-white"
-            value={selectedRange}
-            onChange={e => setSelectedRange(Number(e.target.value))}
-          >
-            <option value={7}>Last 7 days</option>
-            <option value={30}>Last 30 days</option>
-          </select>
+          {showIncome && (
+            <span className="flex items-center text-green-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1" />Income</span>
+          )}
+          {showExpense && (
+            <span className="flex items-center text-lime-500 text-xs font-medium"><span className="inline-block w-2 h-2 rounded-full bg-lime-500 mr-1" />Expenses</span>
+          )}
+          {setSelectedRange && (
+            <select
+              className="ml-2 border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:border-lime-500 bg-white"
+              value={selectedRange}
+              onChange={e => setSelectedRange(Number(e.target.value))}
+            >
+              <option value={7}>Last 7 days</option>
+              <option value={30}>Last 30 days</option>
+            </select>
+          )}
         </div>
       </div>
+      {isEmpty ? (
+        <div className="h-56 flex items-center justify-center text-gray-500 text-sm">No data to display</div>
+      ) : (
       <ResponsiveContainer width="100%" height={260}>
         <LineChart data={filteredData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="var(--color-gray-200)" strokeDasharray="3 3" />
@@ -43,31 +67,35 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
               isAnimationActive={false}
             />
           )}
-          <Line
-            type="monotone"
-            dataKey="income"
-            stroke="var(--color-green-500)"
-            strokeWidth={3}
-            dot={{ fill: "var(--color-green-300)", r: 7, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            activeDot={{ fill: "var(--color-green-500)", r: 9, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            name="Income"
-            animationDuration={900}
-            animationEasing="ease-out"
-          />
-          <Line
-            type="monotone"
-            dataKey="expense"
-            stroke="var(--color-red-500)"
-            strokeWidth={3}
-            dot={{ fill: "var(--color-red-500)", r: 7, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            activeDot={{ fill: "var(--color-red-500)", r: 9, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
-            name="Expenses"
-            animationDuration={900}
-            animationEasing="ease-out"
-          />
+          {showIncome && (
+            <Line
+              type="monotone"
+              dataKey="income"
+              stroke="var(--color-green-500)"
+              strokeWidth={3}
+              dot={false}
+              activeDot={{ fill: "var(--color-green-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+              name="Income"
+              animationDuration={900}
+              animationEasing="ease-out"
+            />
+          )}
+          {showExpense && (
+            <Line
+              type="monotone"
+              dataKey="expense"
+              stroke="var(--color-lime-500)"
+              strokeWidth={3}
+              dot={false}
+              activeDot={{ fill: "var(--color-lime-500)", r: 4, stroke: 'white', strokeWidth: 2, onClick: (e, payload) => onDotClick && onDotClick(payload.payload) }}
+              name="Expenses"
+              animationDuration={900}
+              animationEasing="ease-out"
+            />
+          )}
           <XAxis
             dataKey="date"
-            tickFormatter={date => new Date(date).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' })}
+            tickFormatter={date => formatDateTick(date, 'tr-TR')}
             angle={-30}
             textAnchor="end"
             stroke="var(--color-gray-400)"
@@ -88,11 +116,7 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
               if (state && state.activeTooltipIndex !== undefined) setActiveIndex(state.activeTooltipIndex);
             }}
             onMouseLeave={() => setActiveIndex(null)}
-            labelFormatter={date => {
-              if (!date) return '';
-              const d = new Date(date);
-              return d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' });
-            }}
+            labelFormatter={date => formatDateLong(date, 'tr-TR')}
             formatter={(value, name, props) => {
               const currency = props && props.payload && props.payload.currency ? props.payload.currency : 'TRY';
               return [formatCurrency(value, currency, 'tr-TR'), name];
@@ -100,6 +124,7 @@ export default function IncomeExpenseChart({ data, onDotClick, selectedRange = 7
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+      )}
+    </Wrapper>
   );
 }

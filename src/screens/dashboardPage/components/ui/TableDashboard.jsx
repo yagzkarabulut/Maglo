@@ -6,7 +6,6 @@ import phoneIcon from '../../../../assets/phone.svg';
 import netflixIcon from '../../../../assets/netflix.svg';
 import figmaIcon from '../../../../assets/figma.svg';
 
-// Basit 4 kolon grid (output.css'te mevcut sınıflarla)
 const COLUMNS = { grid: 'grid grid-cols-4' };
 
 function Avatar({ label, img }) {
@@ -25,12 +24,10 @@ function Avatar({ label, img }) {
   );
 }
 
-
 const TableDashboard = ({ data = [] }) => {
   return (
     <div className="mt-4 min-w-0">
-  <div className="bg-white rounded-2xl shadow-sm overflow-hidden p-4">
-        {/* Header */}
+      <div className="bg-white rounded-2xl shadow-sm overflow-hidden p-4">
         <div className="px-2 pb-3 flex items-center justify-between">
           <h3 className="text-xl font-semibold text-gray-900">Recent Transaction</h3>
           <Link to="/transactions" className="text-green-600 font-medium inline-flex items-center gap-1 text-sm hover:underline">
@@ -38,46 +35,31 @@ const TableDashboard = ({ data = [] }) => {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
         </div>
-
-        {/* Column headers (desktop) */}
-        <div className={`px-2 pb-1 ${COLUMNS.grid} text-xs font-semibold text-gray-600`}> 
+        <div className={`px-2 pb-1 ${COLUMNS.grid} text-xs font-semibold text-gray-600`}>
           <div>NAME/BUSINESS</div>
           <div className='ml-6'>TYPE</div>
           <div>AMOUNT</div>
           <div>DATE</div>
         </div>
-
-        {/* Rows */}
         <ul className="px-1">
           {data.length === 0 ? (
             <li className="px-2 py-8 text-center text-gray-600 text-sm">No data</li>
           ) : (
-                  data.slice(0, 3).map((item, idx) => {
-                    // İlk 3 kayıt: açıklama 'Günlük gelir/gider' olsa bile ürün isimleriyle override
-                    const fallbackProductNames = [
-                      {
-                        name: 'Iphone 13 Pro MAX',
-                        company: 'Apple Inc'
-                      },
-                      {
-                        name: 'Netflix Subscription',
-                        company: 'Netflix'
-                      },
-                      {
-                        name: 'Figma Subscription',
-                        company: 'Figma Inc'
-                      }
-                    ];
-                    const rawDesc = item.description || '';
-                    const isGeneric = /Günlük\s+gelir|Günlük\s+gider/i.test(rawDesc);
-                    const mapped = fallbackProductNames[idx];
-                    const title = (isGeneric && mapped?.name) || mapped?.name || rawDesc || (item.type === 'income' ? 'Income' : 'Expense');
-                    const subtitle = (isGeneric && mapped?.company) || mapped?.company || item.category || (item.type || '').toString();
+            data.slice(0, 3).map((item, idx) => {
+              const fallbackProductNames = [
+                { name: 'Iphone 13 Pro MAX', company: 'Apple Inc' },
+                { name: 'Netflix Subscription', company: 'Netflix' },
+                { name: 'Figma Subscription', company: 'Figma Inc' }
+              ];
+              const rawDesc = item.description || '';
+              const isGeneric = /Günlük\s+gelir|Günlük\s+gider/i.test(rawDesc);
+              const mapped = fallbackProductNames[idx];
+              const title = (isGeneric && mapped?.name) || mapped?.name || rawDesc || (item.type === 'income' ? 'Income' : 'Expense');
+              const subtitle = (isGeneric && mapped?.company) || mapped?.company || item.category || (item.type || '').toString();
               const amountUSD = formatCurrency(item.amount, 'USD', 'en-US');
               const img = idx === 0 ? phoneIcon : idx === 1 ? netflixIcon : idx === 2 ? figmaIcon : undefined;
               return (
                 <li key={item.id || idx} className={`px-2 py-3 ${COLUMNS.grid} items-center text-sm`} style={{ animationDelay: `${idx * 40}ms` }}>
-                  {/* Name/Business */}
                   <div className="flex items-center min-w-0">
                     <Avatar label={subtitle || title} img={img} />
                     <div className="ml-3 min-w-0">
@@ -85,11 +67,8 @@ const TableDashboard = ({ data = [] }) => {
                       <div className="text-gray-600 text-xs truncate">{subtitle}</div>
                     </div>
                   </div>
-                  {/* Type */}
                   <div className="text-gray-600 font-normal ml-6 text-xs sm:text-sm">{item.type === 'income' ? 'Mobile' : subtitle}</div>
-                  {/* Amount */}
                   <div className="text-gray-900 font-semibold text-sm">{amountUSD}</div>
-                  {/* Date */}
                   <div className="text-gray-600 font-normal text-xs sm:text-sm">{formatDateShort(item.date, 'en-GB')}</div>
                 </li>
               );

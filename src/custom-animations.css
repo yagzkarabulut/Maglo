@@ -35,3 +35,65 @@
 .animate-searchIn {
   animation: searchIn 0.25s cubic-bezier(0.4,0,0.2,1) forwards;
 }
+
+/* ===================== */
+/* Animated Hamburger     */
+/* ===================== */
+.hamburger-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: background-color 0.25s ease;
+}
+.hamburger-btn:focus-visible {
+  outline: 2px solid var(--color-lime-500, #84cc16);
+  outline-offset: 2px;
+}
+.hamburger-box {
+  position: relative;
+  width: 22px;
+  height: 16px;
+}
+.hamburger-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--color-gray-600, #4b5563);
+  border-radius: 2px;
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.35s cubic-bezier(.68,-0.55,.27,1.55),
+    top 0.35s cubic-bezier(.68,-0.55,.27,1.55),
+    opacity 0.2s ease 0.05s,
+    background-color 0.25s ease;
+}
+.hamburger-bar:nth-child(1) { top: 0; }
+.hamburger-bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.hamburger-bar:nth-child(3) { top: calc(100% - 3px); }
+
+/* Open (collapsed=true) => icon morphs into X */
+.hamburger-btn[data-collapsed="true"] .hamburger-bar:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+.hamburger-btn[data-collapsed="true"] .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn[data-collapsed="true"] .hamburger-bar:nth-child(3) {
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* Hover / active states */
+.hamburger-btn:hover { background: var(--color-gray-100,#f3f4f6); }
+.hamburger-btn:active { background: var(--color-gray-200,#e5e7eb); }
+.hamburger-btn[data-collapsed="true"] .hamburger-bar { background: var(--color-lime-600,#65a30d); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hamburger-bar { transition: none; }
+}

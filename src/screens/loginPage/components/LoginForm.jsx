@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from '../../../context/UserContext';
 import lineImg from "../../../assets/line.JPG";
 
 const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const passwordReg = /^.{6,}$/; // en az 6 karakter
 
 const LoginForm = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // potential future multiple users
   const [mailError, setMailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,11 +28,9 @@ const LoginForm = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/dashboard", {
-        replace: true,
-        state: { from: "login", userName: name, email },
-      });
-    }, 1500);
+      setUser(name, email);
+      navigate("/dashboard", { replace: true });
+    }, 1000);
   };
 
   return (
@@ -102,11 +102,18 @@ const LoginForm = () => {
   type="submit"
   disabled={loading}
   id="submitBtn"
-  className="w-full cursor-pointer transition-colors text-black py-3 rounded-lg mb-3 text-lg shadow-sm bg-lime-400 hover:bg-amber-600"
+  className="w-full cursor-pointer transition-colors text-black py-3 rounded-lg mb-3 text-lg shadow-sm bg-lime-400 hover:bg-amber-600 disabled:opacity-80 disabled:cursor-not-allowed flex items-center justify-center gap-2"
   aria-busy={loading}
   aria-label="Create Account"
 >
-  {loading ? "Creating..." : "Create Account"}
+  {loading ? (
+    <>
+      <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
+      <span className="text-white tracking-wide">Creating...</span>
+    </>
+  ) : (
+    <span>Create Account</span>
+  )}
 </button>
 
       <div className="mb-6">

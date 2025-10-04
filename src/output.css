@@ -1904,3 +1904,42 @@
 #submitBtn:hover{
   background-color: #a1e639;
 }
+
+/* ==============================
+   Custom Added Text Color Utilities
+   - text-green-* (using existing --color-green-* variables)
+   - lime palette variables + text-lime-* utilities
+   ============================== */
+/* Lime color variables (not originally present) */
+:root, :host {
+  --color-lime-300: #bef264; /* Tailwind lime-300 */
+  --color-lime-500: #84cc16; /* Tailwind lime-500 */
+  --color-lime-600: #65a30d; /* Tailwind lime-600 */
+  --color-lime-700: #4d7c0f; /* Tailwind lime-700 */
+  --color-lime-800: #3f6212; /* Tailwind lime-800 */
+}
+
+@layer utilities {
+  /* Text green shades */
+  .text-green-300 { color: var(--color-green-300); }
+  .text-green-500 { color: var(--color-green-500); }
+  .text-green-600 { color: var(--color-green-600); }
+  .text-green-700 { color: var(--color-green-700); }
+  .text-green-800 { color: var(--color-green-800); }
+
+  /* Text lime shades */
+  .text-lime-300 { color: var(--color-lime-300); }
+  .text-lime-500 { color: var(--color-lime-500); }
+  .text-lime-600 { color: var(--color-lime-600); }
+  .text-lime-700 { color: var(--color-lime-700); }
+  .text-lime-800 { color: var(--color-lime-800); }
+}
+
+/* Added background utilities for lime (sidebar active state needs bg-lime-300) */
+@layer utilities {
+  .bg-lime-300 { background-color: var(--color-lime-300); }
+  .bg-lime-500 { background-color: var(--color-lime-500); }
+  .bg-lime-600 { background-color: var(--color-lime-600); }
+  .bg-lime-700 { background-color: var(--color-lime-700); }
+  .bg-lime-800 { background-color: var(--color-lime-800); }
+}

@@ -1,11 +1,15 @@
 
 import AppRouter from './routes/AppRouter'
+import { UserProvider } from './context/UserContext'
+import { CurrencyProvider } from './context/CurrencyContext'
 
 const App = () => {
   return (
-    <div>
+    <UserProvider>
+      <CurrencyProvider>
         <AppRouter />
-    </div>
+      </CurrencyProvider>
+    </UserProvider>
   )
 }
 
