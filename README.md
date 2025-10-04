@@ -148,20 +148,8 @@ Script | Açıklama
 `npm test` | Test runner
 `npm run eject` | CRA yapı dosyalarını dışa çıkarır
 
-## 12. Yol Haritası
-Öncelik | Öneri | Değer
---------|-------|------
-Yüksek | Auth guard | Yetkisiz erişim engeli
-Yüksek | .env ile API URL | Ortam bağımsızlık
-Orta | Döviz kuru servis soyutlama | Dinamik kur güncelleme
-Orta | Unit testler | Refactor güveni
-Orta | Tablo erişilebilirliği | A11y iyileştirme
-Orta | ErrorBoundary | Dayanıklılık
-Düşük | Lazy load / code split | Performans
-Düşük | i18n | Çoklu dil
-Düşük | Dark mode | UX zenginliği
 
-## 13. Öne Çıkan Yaklaşımlar
+## 12. Öne Çıkan Yaklaşımlar
 - Unified tarih & para util katmanı  
 - Duplicate chart dosyalarının temizlenmesi  
 - CurrencySwitch ile UI bağımsız para birimi yönetimi  
@@ -170,7 +158,6 @@ Düşük | Dark mode | UX zenginliği
 
 ---
 
-Sorular / geri bildirim: <email@domain.com>
 
 Teşekkürler!  
 Maglo Case
